@@ -1,13 +1,15 @@
 package dev_java._5.punch_clock.infra;
 
-import jakarta.validation.Validation;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -17,6 +19,24 @@ public class ErrorHandler {
         List<FieldError> errors = e.getFieldErrors();
         return ResponseEntity.badRequest().body(errors.stream()
                 .map(ValidationError::new).toList());
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    public ResponseEntity errorSQL(SQLIntegrityConstraintViolationException e){
+        return ResponseEntity.badRequest()
+                .body(new CustomExceptionHandler("User already registered."));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity entityNotFound(){
+        return ResponseEntity.badRequest()
+                .body(new CustomExceptionHandler("User not found."));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity noSuchElement(){
+        return ResponseEntity.badRequest()
+                .body(new CustomExceptionHandler("User not found."));
     }
 
 

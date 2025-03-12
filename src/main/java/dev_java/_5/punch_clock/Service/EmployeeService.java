@@ -19,4 +19,8 @@ public class EmployeeService {
                 dados.email(), dados.password(),
                 dados.role(), true));
     }
+    public void inactiveEmployee(Long id) {
+        var employee = repository.getReferenceById(id);
+        employee.setInactive();
+    }
 }

@@ -23,4 +23,8 @@ public class Employee {
     @Enumerated(value = EnumType.STRING)
     private Role role;
     private Boolean active;
+
+    public void setInactive() {
+        this.active = false;
+    }
 }
