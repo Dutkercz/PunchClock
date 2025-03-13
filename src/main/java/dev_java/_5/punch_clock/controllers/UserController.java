@@ -2,12 +2,14 @@ package dev_java._5.punch_clock.controllers;
 
 import dev_java._5.punch_clock.Repositories.UserRepository;
 import dev_java._5.punch_clock.Service.UserService;
-import dev_java._5.punch_clock.entities.dto.UserDTO;
-import dev_java._5.punch_clock.entities.dto.UserListingDTO;
+import dev_java._5.punch_clock.entities.dto_user.UserDTO;
+import dev_java._5.punch_clock.entities.dto_user.UserListingDTO;
 import dev_java._5.punch_clock.entities.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -32,6 +34,11 @@ public class UserController {
     public ResponseEntity<UserListingDTO> findUser(@PathVariable Long id){
         var user = repository.getReferenceById(id);
         return ResponseEntity.ok().body(new UserListingDTO(user));
+    }
+
+    @GetMapping("/all")
+    public Page<UserListingDTO> findAll(Pageable page){
+        return service.findAllByAtivoTrue(page);
     }
 
     @DeleteMapping("/delete/{id}")

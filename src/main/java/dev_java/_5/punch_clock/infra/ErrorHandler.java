@@ -24,7 +24,7 @@ public class ErrorHandler {
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity errorSQL(SQLIntegrityConstraintViolationException e){
         return ResponseEntity.badRequest()
-                .body(new CustomExceptionHandler("User already registered."));
+                .body(e.getMessage());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
