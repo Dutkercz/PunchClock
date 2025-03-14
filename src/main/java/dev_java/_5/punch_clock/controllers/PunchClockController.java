@@ -1,10 +1,9 @@
 package dev_java._5.punch_clock.controllers;
 
-import dev_java._5.punch_clock.Repositories.PunchClockRespository;
-import dev_java._5.punch_clock.Service.PunchClockService;
+import dev_java._5.punch_clock.repositories.PunchClockRespository;
+import dev_java._5.punch_clock.service.PunchClockService;
 import dev_java._5.punch_clock.entities.PunchClockDTO;
 import dev_java._5.punch_clock.entities.PunchClockListing;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package dev_java._5.punch_clock.Repositories;
+package dev_java._5.punch_clock.repositories;
 
 import dev_java._5.punch_clock.entities.User;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
-package dev_java._5.punch_clock.Service;
+package dev_java._5.punch_clock.service;
 
-import dev_java._5.punch_clock.Repositories.PunchClockRespository;
+import dev_java._5.punch_clock.repositories.PunchClockRespository;
 import dev_java._5.punch_clock.entities.PunchClock;
 import dev_java._5.punch_clock.entities.PunchClockDTO;
 import jakarta.transaction.Transactional;

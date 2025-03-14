@@ -1,7 +1,7 @@
 package dev_java._5.punch_clock.controllers;
 
-import dev_java._5.punch_clock.Repositories.UserRepository;
-import dev_java._5.punch_clock.Service.UserService;
+import dev_java._5.punch_clock.repositories.UserRepository;
+import dev_java._5.punch_clock.service.UserService;
 import dev_java._5.punch_clock.entities.dto_user.UserDTO;
 import dev_java._5.punch_clock.entities.dto_user.UserListingDTO;
 import dev_java._5.punch_clock.entities.User;
