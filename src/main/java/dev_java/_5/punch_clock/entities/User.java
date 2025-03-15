@@ -1,5 +1,6 @@
 package dev_java._5.punch_clock.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev_java._5.punch_clock.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
     private Boolean active;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<PunchClock> punchClocks;
 
     public void setInactive() {
@@ -55,21 +57,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return this.active != null && this.active;
     }
 }

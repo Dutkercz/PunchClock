@@ -23,25 +23,25 @@ public class UserController {
     @Autowired
     private UserRepository repository;
 
-    @PostMapping("/register")
+    @PostMapping("/admin/register")
     public ResponseEntity<UserListingDTO> register(@RequestBody @Valid UserDTO dados,
                                                    UriComponentsBuilder builder){
         User user = service.saveRegister(dados);
-        var uri = builder.path("/user/register/{id}").buildAndExpand(user.getId()).toUri();
+        var uri = builder.path("/user/admin/register/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserListingDTO(user));
     }
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public ResponseEntity<UserListingDTO> findUser(@PathVariable Long id){
         var user = repository.getReferenceById(id);
         return ResponseEntity.ok().body(new UserListingDTO(user));
     }
 
-    @GetMapping("/all")
+    @GetMapping("admin/all")
     public Page<UserListingDTO> findAll(Pageable page){
         return service.findAllByAtivoTrue(page);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("admin/delete/{id}")
     @Transactional
     public ResponseEntity<UserListingDTO> logicalDeletion (@PathVariable Long id){
         repository.findById(id).orElseThrow();

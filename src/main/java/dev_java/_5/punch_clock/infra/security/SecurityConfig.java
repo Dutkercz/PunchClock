@@ -3,7 +3,6 @@ package dev_java._5.punch_clock.infra.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,14 +23,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("Estou no filtro de segurança");
         return http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    req.requestMatchers("/login").permitAll();
-                            //.requestMatchers("/register").hasAnyAuthority("ROLE_ADMIN");
-                    req.anyRequest().authenticated();
-                }).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                    req.requestMatchers("/auth/login").permitAll();
+                    req.anyRequest().authenticated(); }
+               ).addFilterAfter(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
