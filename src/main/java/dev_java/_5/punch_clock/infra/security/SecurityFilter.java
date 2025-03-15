@@ -25,26 +25,30 @@ public class SecurityFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Iniciando filtro de segurança para: " + request.getRequestURI());
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
-        var token = recoverToken(request);
-        if (token != null){
-            var subject = tokenService.getSubject(token);
+        String token = recoverToken(request);
+        if (token != null) {
+            String subject = tokenService.getSubject(token);
 
             UserDetails user = userRepository.findByEmail(subject);
-            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                var authentication = new UsernamePasswordAuthenticationToken
-                        (user, null, user.getAuthorities());
+            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-            filterChain.doFilter(request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
         }
+
+        filterChain.doFilter(request, response);
     }
+
     private String recoverToken(HttpServletRequest request) {
-        var authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null){
-            return authorizationHeader.replaceAll("Bearer ", "");
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.replace("Bearer ", "");
         }
         return null;
     }

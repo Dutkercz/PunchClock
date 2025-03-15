@@ -1,5 +1,6 @@
 package dev_java._5.punch_clock.controllers;
 
+import dev_java._5.punch_clock.entities.TokenDTO;
 import dev_java._5.punch_clock.entities.User;
 import dev_java._5.punch_clock.entities.UserAuthenticationDTO;
 import dev_java._5.punch_clock.service.TokenService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/login")
 public class LoginController {
 
     @Autowired
@@ -23,15 +24,13 @@ public class LoginController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenDTO> loginAuth(@RequestBody @Valid UserAuthenticationDTO authData){
+    @PostMapping()
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid UserAuthenticationDTO authData){
         var authenticationToken = new UsernamePasswordAuthenticationToken(
                 authData.email(), authData.password());
         var authentication = manager.authenticate(authenticationToken);
         var tokenJWT = tokenService.createToken((User) authentication.getPrincipal());
-        return ResponseEntity.ok((new TokenDTO(tokenJWT)));
+        return ResponseEntity.ok().body((new TokenDTO(tokenJWT)));
     }
 
-    public record TokenDTO(String tokenJWT) {
-    }
 }

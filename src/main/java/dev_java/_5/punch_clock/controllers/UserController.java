@@ -23,20 +23,20 @@ public class UserController {
     @Autowired
     private UserRepository repository;
 
-    @PostMapping("/admin/register")
+    @PostMapping("/register")
     public ResponseEntity<UserListingDTO> register(@RequestBody @Valid UserDTO dados,
                                                    UriComponentsBuilder builder){
         User user = service.saveRegister(dados);
-        var uri = builder.path("/user/admin/register/{id}").buildAndExpand(user.getId()).toUri();
+        var uri = builder.path("/user/register/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserListingDTO(user));
     }
-    @GetMapping("/admin/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserListingDTO> findUser(@PathVariable Long id){
         var user = repository.getReferenceById(id);
         return ResponseEntity.ok().body(new UserListingDTO(user));
     }
 
-    @GetMapping("admin/all")
+    @GetMapping("/all")
     public Page<UserListingDTO> findAll(Pageable page){
         return service.findAllByAtivoTrue(page);
     }

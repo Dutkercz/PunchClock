@@ -23,14 +23,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("Estou no filtro de segurança");
         return http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    req.requestMatchers("/auth/login").permitAll();
+                    req.requestMatchers("/login").permitAll();
+                    req.requestMatchers("/user/register").permitAll();
                     req.anyRequest().authenticated(); }
-               ).addFilterAfter(securityFilter, UsernamePasswordAuthenticationFilter.class)
+               ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
