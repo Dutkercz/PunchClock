@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -30,19 +31,19 @@ public class SecurityFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         String token = recoverToken(request);
-        if (token != null) {
-            String subject = tokenService.getSubject(token);
 
-            UserDetails user = userRepository.findByEmail(subject);
-            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        if (token != null) {
+            String usuario = tokenService.getSubject(token);
+            UsernamePasswordAuthenticationToken authUser = new UsernamePasswordAuthenticationToken(
+                    usuario,
+                    null,
+                    new ArrayList<>() );
+            SecurityContextHolder.getContext().setAuthentication(authUser);
+
+            filterChain.doFilter(request, response);
         }
 
-        filterChain.doFilter(request, response);
+
     }
 
     private String recoverToken(HttpServletRequest request) {
